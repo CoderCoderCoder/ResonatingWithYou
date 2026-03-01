@@ -452,6 +452,25 @@ Example of default scale (Partch Otonality)
      +--------------------------------------
  [X]    0        1       2       3      RIGHT (+1 Degree)
 ```
+## Generative field
+The [gen_field](gen_field.py) script creates walker logic to navigate a stochastic soundscape, where four independent algorithmic agents move across an 8x8 grid to trigger and spatialize sound.
+
+Buttons follow this schema:
+```
+"""
+Generative Field
+============================================================
+- Top Buttons 0-3: Momentary Channel Solo (Sine Wave, Red on press)
+- Top Button 4: Delay Multi-State (Cycle Off/Low/Mid/High, Green/Amber/Red)
+- Top Button 5: Reverb Multi-State (Cycle Off/Low/Mid/High, Green/Amber/Red)
+- Top Buttons 6-7: Main Volume (Amber 60%, Red at Peak)
+
+- Side Buttons 0-3: Toggle Algorithmic Walkers (Markov, Brownian, Fractal, Genetic)
+- Side Buttons 4-6: Speed Selectors (Half, Normal, Double Schumann Speed)
+- Side Button 7: EXIT / POWER OFF (Blue/Cyan on Mk2, 2-sec Fade Out on press)
+"""
+```
+
 ## Formalized music
 The [formalized_m](formalized_m.py) script retraces the main stages of Iannis Xenakis's text, arranging the iconic sounds in conflict with each other in quadraphonic sound, as is predictable, according to game theory; the grid is occupied with known statistical models and algorithms reported in the text[^6].
 
