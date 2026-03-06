@@ -17,9 +17,11 @@ listening experience.
 
 ================================================================
 Auditory display: 
-- Pitch depends on brightness (grayscale value) determines the frequency.
-- Timbre depends on RGB values which controls the number of harmonics in the waveform.
-- Spatialization depends on pixel's Y-coordinate for front and rear speakers, X-coordinate for left and right.
+- Pitch depends on brightness (grayscale) which maps the frequency.
+- Timbre depends on RGB values which controls the number of 
+  harmonics in the waveform.
+- Spatialization depends on pixel's Y-coordinate for front and rear 
+  speakers, X-coordinate for left and right.
 """
 
 # 1. File Path Configuration
