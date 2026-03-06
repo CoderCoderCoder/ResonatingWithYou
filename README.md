@@ -2,7 +2,8 @@
 
 ### For MacOS you need:
     brew install portmidi portaudio liblo libsndfile numpy blackhole-16ch
-  
+    pip install mido python-rtmidi
+    
   Python 3.12, not newer!
   
   Blackhole (https://github.com/ExistentialAudio/BlackHole)
