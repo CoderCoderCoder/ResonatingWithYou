@@ -31,6 +31,7 @@ Settings for all 4 plugins:
 (you can also play with the distance and the settings by yourself)
 
 Remember: Blackhole inputs 1-4 should go into only 1 input channel per plugin, and both outputs from plugins should go into the final audio output (your headphones).
+Original README from Yeshi Namkhai follows below.
 
 # Resonating With You
 Welcome to the repository for **Resonating With You**, an event taking place in February 2026 at Dzamling Gar, offering an immersive sound experience designed to help you truly understand yourself and the characteristics of your perception of the world. It is intended for reflective individuals, those familiar with meditation, and researchers who wish to explore their work—the process of making sense of their data, experientially, through sound.
