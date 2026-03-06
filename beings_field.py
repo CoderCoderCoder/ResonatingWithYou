@@ -6,10 +6,11 @@ import launchpad_py as launchpad
 """
 Living Beings Field: 
 ====================================================================================================
-The [beings_field](beings_field.py) script is a musical instrument that allows you to explore sound 
-space within time constrains, living beings are created by pressing side buttons. Their ability to 
-move and interact is modulated by your choises, pressing top buttons. On the grid youcan activate 
-obstacles and trap beings, their sound will switch from pulse to tone. 
+This script script is a musical instrument that allows exploration of sound space within time 
+constrains, living beings are created by pressing side buttons. Their ability to move and interact 
+depends on top buttons, while cells on the grid activate obstacles, you can trap beings and their 
+sound will switch from pulse to tone. Music ends with the last being dying, 
+pressing a side button triggers death or ribirth.
 ====================================================================================================
 Top Buttons   0: Delay Multi-State (Cycle Off/Circular/Ping-Pong, Green/Red/Amber)
 Top Button    1: FM Collision Toggle (Red = Enabled, Green = Disabled)
