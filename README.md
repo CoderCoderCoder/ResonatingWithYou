@@ -2,7 +2,7 @@
 
 ### For MacOS you need:
     brew install portmidi portaudio liblo libsndfile numpy blackhole-16ch
-    All Python packages in requirements.txt
+    pip3 install -r requirements.txt
     
   Python 3.12 (or some versions below), not newer!
   
