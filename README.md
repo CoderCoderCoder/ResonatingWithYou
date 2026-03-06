@@ -377,6 +377,67 @@ Stochastic Field
             Dim color = Ready; Bright color = Triggering; Red = Scale Root
 ```
 
+## Living beings field
+The [beings_field](beings_field.py) script is a musical instrument that allows exploration of sound space within time constrains, living beings are created by pressing side buttons. Their ability to move and interact depends on top buttons, while cells on the grid activate obstacles, you can trap beings and their sound will switch from pulse to tone. Music ends with the last being dying, pressing a side button triggers death or ribirth.  
+
+Buttons follow this schema:
+```
+Living Beings Field: 
+====================================================================================================
+Top Buttons   0: Delay Multi-State (Cycle Off/Circular/Ping-Pong, Green/Red/Amber)
+Top Button    1: FM Collision Toggle (Red = Enabled, Green = Disabled)
+Top Button    2: Warp Jump (Randomly relocates all active balls, Red while running)
+Top Button    3: Granulator Multi-State (Cycle Off/Random Pos/Random All, Green/Red/Amber)
+Top Button    4: Wrap/No-Walls Toggle (Red = Enabled, Green = Disabled, 8s Lock)
+Top Button    5: Obstacle Multi-State (Cycle Idle/Remove All/Relocate All, Green/Red/Amber)
+Top Buttons 6-7: Master Volume (Decrease/Increase by 0.05, Color reflects level)
+(all top buttons have 8s Lock, except for volume)
+
+Side Buttons 0-1: Trigger/Kill being (Very Highs)
+Side Buttons 2-3: Trigger/Kill being (Mids)
+Side Button    4: Trigger/Kill being (Percussions)
+Side Button    5: Trigger/Kill being (Drums)
+Side Buttons 6-7: Trigger/Kill being (Lows)
+
+Main Grid (8x8):
+- Press Empty Cell: Toggle Static Obstacle (Amber LED)
+- Active Balls: Real-time position tracking (Unique colors per ball index)
+
+Life Expectancy (shown at start):
+- FEW COLUMNS (e.g., 1): Balls lose energy quickly and stop soon.
+- MANY COLUMNS (e.g., 8): Balls lose energy very slowly, moving for a long time.
+====================================================================================================
+```
+<details>
+
+<summary>Scales</summary>
+
+```python
+SCALES = {
+    'major': [0, 2, 4, 5, 7, 9, 11],
+    'minor': [0, 2, 3, 5, 7, 8, 10],
+    'harmonic_minor': [0, 2, 3, 5, 7, 8, 11],
+    'melodic_minor': [0, 2, 3, 5, 7, 9, 11],
+    'dorian': [0, 2, 3, 5, 7, 9, 10],
+    'phrygian': [0, 1, 3, 5, 7, 8, 10],
+    'lydian': [0, 2, 4, 6, 7, 9, 11],
+    'mixolydian': [0, 2, 4, 5, 7, 9, 10],
+    'pentatonic_major': [0, 2, 4, 7, 9],
+    'pentatonic_minor': [0, 3, 5, 7, 10],
+    'blues': [0, 3, 5, 6, 7, 10],
+    'whole_tone': [0, 2, 4, 6, 8, 10],
+    'chromatic': [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    'hexatonic': [0, 1, 4, 5, 8, 9],  # Augmented scale
+    'octatonic': [0, 2, 3, 5, 6, 8, 9, 11],  # Diminished scale
+    'indian_raga_bhairav': [0, 1, 4, 5, 7, 8, 11],
+    'indian_raga_kalyan': [0, 2, 4, 6, 7, 9, 11],
+    'neapolitan_major': [0, 1, 3, 5, 7, 9, 11],
+    'neapolitan_minor': [0, 1, 3, 5, 7, 8, 11],
+    'hungarian_minor': [0, 2, 3, 6, 7, 8, 11],
+}
+```
+</details><br>
+
 ## Psychoacoustic Tests
 The [psychoa_test](psychoa_test.py) script is a series of psychoacoustic tests that offer the opportunity to gain experiential knowledge in the context of quadraphonic setup.
 
@@ -399,7 +460,7 @@ Experiential psychoacoustic tests
 - Side Button 6: EXIT / POWER OFF (Blue/Cyan)
 ```
 
-# Entropic field
+## Entropic field
 The [entropic_field](entropic_field.py) script creates a chaotic motion of cells, initially stacked in two columns. You can select the initial layout, default to left which works also in stereo, when top or bottom, which goes from bright to dull tone or opposite, only works with 4 speakers; you may also experiment with reverb, delay and speed. Entropy increases and the cells move for about 4 minutes, reaching the opposite side.
 
 Buttons follow this schema:
@@ -452,12 +513,22 @@ Example of default scale (Partch Otonality)
      +--------------------------------------
  [X]    0        1       2       3      RIGHT (+1 Degree)
 ```
+
+## ChNN sonic image 
+The [chnn_scan](chnn_scan.py) script is a quadraphonic image-to-sound sonifier. It scans a digital image pixel-by-pixel and shows the position on GUI, while allowing to control the speed, reverb and compression for a better listening experience.
+<p><img src="https://raw.githubusercontent.com/YeshiNamkhai/ResonatingWithYou/refs/heads/main/201310%20ChNN%20Barcelona%20by%20Paolo%20Fassoli_09_square_BW.jpg" width="150"></p>
+
+Auditory display: 
+* Pitch depends on brightness (grayscale) which maps the frequency.
+* Timbre depends on RGB values which controls the number of harmonics in the waveform.
+* Spatialization depends on pixel's Y-coordinate for front and rear speakers, X-coordinate for left and right.
+
+
 ## Generative field
 The [gen_field](gen_field.py) script creates walker logic to navigate a stochastic soundscape, where four independent algorithmic agents move across an 8x8 grid to trigger and spatialize sound.
 
 Buttons follow this schema:
 ```
-"""
 Generative Field
 ============================================================
 - Top Buttons 0-3: Momentary Channel Solo (Sine Wave, Red on press)
@@ -468,7 +539,6 @@ Generative Field
 - Side Buttons 0-3: Toggle Algorithmic Walkers (Markov, Brownian, Fractal, Genetic)
 - Side Buttons 4-6: Speed Selectors (Half, Normal, Double Schumann Speed)
 - Side Button 7: EXIT / POWER OFF (Blue/Cyan on Mk2, 2-sec Fade Out on press)
-"""
 ```
 
 ## Formalized music
