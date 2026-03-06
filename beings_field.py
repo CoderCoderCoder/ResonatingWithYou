@@ -167,14 +167,14 @@ INSTRUMENT_FAMILIES = {
 }
 
 BALL_FAMILY_MAP = [
-    'veryhighs',   # Ball 0
-    'veryhighs',   # Ball 1
-    'mids',        # Ball 2
-    'mids',        # Ball 3
-    'percussion',  # Ball 4
-    'drums',       # Ball 5
-    'lows',        # Ball 6
-    'lows'         # Ball 7
+    'veryhighs',   # Ball/Being 0
+    'veryhighs',   # Ball/Being 1
+    'mids',        # Ball/Being 2
+    'mids',        # Ball/Being 3
+    'percussion',  # Ball/Being 4
+    'drums',       # Ball/Being 5
+    'lows',        # Ball/Being 6
+    'lows'         # Ball/Being 7
 ]
 
 # --- 4. Configuration & State ---
