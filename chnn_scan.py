@@ -14,6 +14,11 @@ This script is a quadraphonic image-to-sound sonifier. It scans
 a digital image pixel-by-pixel and shows the position on GUI, while
 allowing to control the speed, reverb and compression for a better
 listening experience.
+
+Auditory display: 
+- Pitch: Brightness (grayscale value) determines the frequency.
+- Timbre: The RGB balance controls the number of harmonics (harms) in the waveform.
+- Spatialization: The pixel's Y-coordinate crossfades sound between front and rear speakers, while the X-coordinate pans between left and right.
 """
 
 # 1. File Path Configuration
