@@ -6,5 +6,5 @@ pip==26.0.1
 pygame==2.6.1
 pyo==1.0.5
 python-rtmidi==1.5.8
-setuptools==65.5.0
+setuptools>=70.0.0
 wxPython==4.2.5
