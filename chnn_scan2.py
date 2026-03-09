@@ -112,6 +112,21 @@ def load_image_data(img_path, size=(64, 64)):
     img_display = img.resize((400, 400))
     return pixels, size[0], size[1], img_display
 
+# If image file not found, open a file picker dialog
+if not os.path.isfile(target_file):
+    print(f"--- Image not found: {target_file} ---")
+    print("--- Opening file picker... ---")
+    _app = wx.App(False)
+    dlg = wx.FileDialog(None, "Select an image file", wildcard="Image files (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp|All files (*.*)|*.*", style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+    if dlg.ShowModal() == wx.ID_OK:
+        target_file = dlg.GetPath()
+        print(f"--- Selected: {target_file} ---")
+    else:
+        print("--- No file selected. Exiting. ---")
+        sys.exit(1)
+    dlg.Destroy()
+    _app.Destroy()
+
 pixel_data, width, height, display_img = load_image_data(target_file)
 num_pixels = len(pixel_data)
 
@@ -146,7 +161,7 @@ sp = Spectrum(comp)
 # 8. wxPython Interface with Compact Sliders
 class SonifierFrame(wx.Frame):
     def __init__(self, parent, title, img_obj):
-        super(SonifierFrame, self).__init__(parent, title=title, size=(420, 780))
+        super(SonifierFrame, self).__init__(parent, title=title, size=(420, 830))
         self.panel = wx.Panel(self)
         
         # Display Image
@@ -159,8 +174,12 @@ class SonifierFrame(wx.Frame):
         
         # Start Button
         y_pos = 410
-        self.start_btn = wx.Button(self.panel, label="START SCAN", pos=(10, y_pos), size=(380, 35))
+        self.start_btn = wx.Button(self.panel, label="START SCAN", pos=(10, y_pos), size=(185, 35))
         self.start_btn.Bind(wx.EVT_BUTTON, self.on_start)
+
+        # Select Image Button
+        self.select_btn = wx.Button(self.panel, label="SELECT IMAGE", pos=(205, y_pos), size=(185, 35))
+        self.select_btn.Bind(wx.EVT_BUTTON, self.on_select_image)
 
         # Slider Helper Function for Thinness
         def create_thin_slider(label, val, mini, maxi, y):
@@ -206,6 +225,27 @@ class SonifierFrame(wx.Frame):
         self.start_btn.Disable()
         count.reset()
         met.play()
+
+    def on_select_image(self, e):
+        global pixel_data, width, height, num_pixels, display_img
+        met.stop()
+        dlg = wx.FileDialog(self, "Select an image file",
+            wildcard="Image files (*.jpg;*.jpeg;*.png;*.bmp)|*.jpg;*.jpeg;*.png;*.bmp|All files (*.*)|*.*",
+            style=wx.FD_OPEN | wx.FD_FILE_MUST_EXIST)
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            print(f"--- Loading image: {path} ---")
+            pixel_data, width, height, display_img = load_image_data(path)
+            num_pixels = len(pixel_data)
+            count.max = num_pixels
+            # Update displayed image
+            wx_img = wx.Image(display_img.width, display_img.height)
+            wx_img.SetData(display_img.tobytes())
+            self.canvas.SetBitmap(wx.Bitmap(wx_img))
+            self.cursor.SetSize((400 // width, 400 // height))
+            self.cursor.SetPosition((-10, -10))
+            self.start_btn.Enable()
+        dlg.Destroy()
 
     def update_vol(self, e): db_val.value = self.vol_slider.GetValue()
     def update_speed(self, e): met.time = self.speed_slider.GetValue() / 1000.0

@@ -473,6 +473,9 @@ elif mode in ["Pro", "ProMk3"]:
     SIDE_CHORUS_BTN = 69
     SIDE_NEXT_SOUND = 49; SIDE_PREV_SOUND = 39
 
+# Pro/ProMk3 use Mk2-style button IDs and 0-63 color range
+IS_MK2_STYLE = (mode in ["Mk2", "Pro", "ProMk3"])
+
 # --- 2. Audio Setup ---
 s = Server(sr=48000, nchnls=num_channels, duplex=0, buffersize=BUFFER_SIZE, winhost=AUDIO_HOST)
 if AUDIO_DEVICE != -1:
@@ -523,9 +526,9 @@ SCALE_NAMES = list(SCALES_DICT.keys())
 NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"]
 target_scale_idx, root_note = 0, 0
 
-COLOR_MAP_BRIGHT = {"Chromatic": (63,63) if mode=="Mk2" else (3,3), "Harmonic Series": (63,15) if mode=="Mk2" else (3,1), "Partch Otonality": (0,63) if mode=="Mk2" else (0,3), "Partch Utonality": (40,63) if mode=="Mk2" else (2,3), "Major": (63,40) if mode=="Mk2" else (3,2), "Minor": (20,20) if mode=="Mk2" else (1,1)}
+COLOR_MAP_BRIGHT = {"Chromatic": (63,63) if IS_MK2_STYLE else (3,3), "Harmonic Series": (63,15) if IS_MK2_STYLE else (3,1), "Partch Otonality": (0,63) if IS_MK2_STYLE else (0,3), "Partch Utonality": (40,63) if IS_MK2_STYLE else (2,3), "Major": (63,40) if IS_MK2_STYLE else (3,2), "Minor": (20,20) if IS_MK2_STYLE else (1,1)}
 COLOR_MAP_DIM = {k: (max(1, v[0]//6), max(1, v[1]//6)) for k, v in COLOR_MAP_BRIGHT.items()}
-COLOR_ROOT_BRIGHT, COLOR_ROOT_DIM = ((63,0), (12,0)) if mode=="Mk2" else ((3,0), (1,0))
+COLOR_ROOT_BRIGHT, COLOR_ROOT_DIM = ((63,0), (12,0)) if IS_MK2_STYLE else ((3,0), (1,0))
 
 rev_inputs = [Sig(0) for _ in range(4)]
 delays = [Delay(rev_inputs[i], delay=0.1, feedback=0.35, mul=0.5) for i in range(4)]
@@ -582,9 +585,9 @@ def update_ui():
         color = (0,20) if i%2==0 else (0,63)
         lp_led_raw(TOP_BTNS[i], color[0], color[1])
 
-    if reverb_mode == 0: lp_led_raw(TOP_BTNS[4], 0, 63) if mode=="Mk2" else lp_led_raw(TOP_BTNS[4], 0, 3)
-    elif reverb_mode == 1: lp_led_raw(TOP_BTNS[4], 63, 63) if mode=="Mk2" else lp_led_raw(TOP_BTNS[4], 3, 3)
-    else: lp_led_raw(TOP_BTNS[4], 63, 0) if mode=="Mk2" else lp_led_raw(TOP_BTNS[4], 3, 0)
+    if reverb_mode == 0: lp_led_raw(TOP_BTNS[4], 0, 63) if IS_MK2_STYLE else lp_led_raw(TOP_BTNS[4], 0, 3)
+    elif reverb_mode == 1: lp_led_raw(TOP_BTNS[4], 63, 63) if IS_MK2_STYLE else lp_led_raw(TOP_BTNS[4], 3, 3)
+    else: lp_led_raw(TOP_BTNS[4], 63, 0) if IS_MK2_STYLE else lp_led_raw(TOP_BTNS[4], 3, 0)
 
     lp_led_raw(TOP_BTNS[5], 63, 63) if migration_active else lp_led_raw(TOP_BTNS[5], 0, 0)
 
