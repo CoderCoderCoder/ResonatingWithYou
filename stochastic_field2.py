@@ -171,7 +171,7 @@ class KeyboardManager:
 
     def close(self):
         if not WINDOWS:
-            termios.tcsetattr(self.fd, termios.TCSADRAIN, self.old_settings)
+            termios.tcsetattr(self.fd, termios.TCSANOW, self.old_settings)
 
 # --- Virtual Launchpad Class (Emulation) ---
 class VirtualLaunchpad:
@@ -790,6 +790,8 @@ try:
         time.sleep(0.002)
 finally:
     running = False
+    # Give daemon threads time to notice running=False and exit cleanly
+    time.sleep(0.3)
     
     if 'agents' in locals():
         for a in agents: 

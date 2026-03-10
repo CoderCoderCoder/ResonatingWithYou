@@ -99,7 +99,7 @@ class KeyboardManager:
                 return char
             return None
     def close(self):
-        if not WINDOWS: termios.tcsetattr(self.fd, termios.TCSADRAIN, self.old_settings)
+        if not WINDOWS: termios.tcsetattr(self.fd, termios.TCSANOW, self.old_settings)
 
 # --- Virtual Launchpad Class (Emulation) ---
 class VirtualLaunchpad:

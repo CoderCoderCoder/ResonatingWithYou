@@ -129,7 +129,7 @@ class KeyboardManager:
                 return char
             return None
     def close(self):
-        if not WINDOWS: termios.tcsetattr(self.fd, termios.TCSADRAIN, self.old_settings)
+        if not WINDOWS: termios.tcsetattr(self.fd, termios.TCSANOW, self.old_settings)
 
 # --- Virtual Launchpad Class (Emulation) ---
 class VirtualLaunchpad:
@@ -853,7 +853,8 @@ try:
 except KeyboardInterrupt: print("\nKeyboard Interrupt detected."); running = False
 finally:
     running = False
-    time.sleep(0.15) 
+    # Give daemon threads time to notice running=False and exit cleanly
+    time.sleep(0.3)
     
     if 's' in locals():
         s.stop()
