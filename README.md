@@ -20,7 +20,11 @@
 
 This is how your Element setup should look like for a quadrophonic emulation with any good (ideally open) headphones (I'm using Sennheiser HD 560S)
 
-<img width="640" height="350" alt="image" src="https://github.com/user-attachments/assets/fe2fd8d2-ea18-4de5-9e46-ef6586f1589c" />
+<img width="332" height="327" alt="image" src="https://github.com/user-attachments/assets/7a03aefc-c36a-4e99-b3de-eb5bfb45f804" />
+
+<img width="348" height="381" alt="image" src="https://github.com/user-attachments/assets/00a3c088-46ca-439b-8326-903ec434b491" />
+
+<img width="371" height="339" alt="image" src="https://github.com/user-attachments/assets/b838ed8f-acb4-42f4-8a57-ddf52f6e15bd" />
 
 <img width="447" height="179" alt="image" src="https://github.com/user-attachments/assets/cab0dc16-944d-4823-97da-ed149b8cad4b" />
 
