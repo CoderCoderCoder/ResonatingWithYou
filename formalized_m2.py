@@ -286,28 +286,70 @@ print(" '-d <id>', '--device <id>', Set audio output device ID ")
 # --- Print Audio Devices Debug ---
 print("\n" + "=" * 50)
 print(" AVAILABLE AUDIO DEVICES:")
+
+# Capture pa_list_devices() text output for parsing
+import io as _io
+_capture = _io.StringIO()
+_old_stdout = sys.stdout
+sys.stdout = _capture
 pa_list_devices()
+sys.stdout = _old_stdout
+_dev_text = _capture.getvalue()
+print(_dev_text, end='')  # Print it for the user to see
 print("=" * 50 + "\n")
 
-# --- Audio Channel Auto-Detection (from test_speakers.py) ---
-try:
-    actual_dev_id = pa_get_default_output() if AUDIO_DEVICE == -1 else AUDIO_DEVICE
-    max_chans = pa_get_output_max_channels(actual_dev_id)
-    if max_chans == 0: max_chans = 2
-except:
-    actual_dev_id = AUDIO_DEVICE
-    max_chans = 2
+# --- Audio Device & Channel Auto-Detection ---
+# Parse pa_list_devices() output to find multi-channel OUT devices
+# (pa_get_output_max_channels() returns 0 before server boot on macOS CoreAudio)
+import re as _re
+_out_devices = []  # [(dev_id, name, guessed_channels), ...]
+for _line in _dev_text.splitlines():
+    _m = _re.match(r'^\s*(\d+):\s*OUT,\s*name:\s*(.+?),\s*host', _line)
+    if _m:
+        _dev_id = int(_m.group(1))
+        _dev_name = _m.group(2).strip()
+        # Try to extract channel count from name (e.g. "BlackHole 16ch", "BlackHole 2ch")
+        _ch_match = _re.search(r'(\d+)\s*ch', _dev_name, _re.IGNORECASE)
+        _guessed_ch = int(_ch_match.group(1)) if _ch_match else 2
+        _out_devices.append((_dev_id, _dev_name, _guessed_ch))
+        print(f"   OUT Device {_dev_id}: \"{_dev_name}\" (~{_guessed_ch}ch)")
+
+if args.device is not None:
+    actual_dev_id = args.device
+    max_chans = next((ch for did, _, ch in _out_devices if did == actual_dev_id), 2)
+    print(f"   DEVICE: Manually set to ID {actual_dev_id}")
+else:
+    # Pick first output device with 4+ channels
+    _quad = [(d, n, ch) for d, n, ch in _out_devices if ch >= 4]
+    if _quad:
+        actual_dev_id = _quad[0][0]
+        max_chans = _quad[0][2]
+        print(f"   >>> AUTO-SELECTED: Device {actual_dev_id} \"{_quad[0][1]}\" ({max_chans}ch)")
+    elif _out_devices:
+        actual_dev_id = _out_devices[0][0]
+        max_chans = _out_devices[0][2]
+        print(f"   No 4+ channel device found, using first output: ID {actual_dev_id}")
+    else:
+        try:
+            actual_dev_id = pa_get_default_output()
+        except:
+            actual_dev_id = 0
+        max_chans = 2
+        print(f"   No output devices parsed, using system default: ID {actual_dev_id}")
+
+AUDIO_DEVICE = actual_dev_id
 
 if args.channels:
     num_channels = args.channels
 else:
-    num_channels = 4 if max_chans >= 4 else 2
+    num_channels = min(4, max_chans)
+    if num_channels < 4:
+        print(f"   NOTE: Selected device supports {max_chans}ch, using {num_channels} channels")
 
 print(f"\n>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
-print(f" FORCED AUDIO DEVICE: ID {actual_dev_id}")
+print(f" AUDIO DEVICE: ID {actual_dev_id}")
 print(f" TOTAL CHANNELS: {num_channels}")
 print(f"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<\n")
-
 # --- Find Launchpad Ports & Assign Mode ---
 lp = None
 mode = None
