@@ -1,6 +1,7 @@
 ## Adaptation of ResonatingWithYou (huge thanks to Yeshi Namkhai!) for MacOS+Windows, Launchpad MK3 Pro (other launchpads remained) and emulation through regular computer keyboard, plus virtual quadrophonic setup for headphones
 
-Simply run
+Simply run:
+
     python3 start.py
 
 ### For MacOS you need:
