@@ -1311,6 +1311,9 @@ def toggle_obstacle(x, y):
             lp_led(x, y, 3, 3)
 
 # --- 9. Ableton Link Setup (via MIDI Clock) ---
+# NOTE: This is placeholder code. The Metro below was running at 48Hz
+# doing nothing (TrigFunc callback is commented out). Disabled to save CPU.
+# To enable Ableton Link sync, uncomment and implement send_clock().
 def setup_link():
     """Setup Ableton Link sync via MIDI clock output"""
     global link_metro
@@ -1326,7 +1329,7 @@ def setup_link():
     # TrigFunc(link_metro, send_clock)
     print(f"--- Ableton Link: Tempo = {GLOBAL_TEMPO} BPM ---")
 
-setup_link()
+#setup_link()
 
 # --- 10. Scalar Start ---
 scalar = random.randint(1, 8)
@@ -1340,13 +1343,17 @@ for c in range(8):
         lp_led(c, r, 0, 0) 
 
 while True:
-    if EMULATE_MODE:
-        key = kb_mgr.get_key()
-        if key == '\x1b': break
-        if key: lp.feed_key(key)
+    key = kb_mgr.get_key()
+    if key == '\x1b': break
+    if EMULATE_MODE and key:
+        lp.feed_key(key)
     ev = lp.ButtonStateRaw()
     if ev: break
     time.sleep(0.01)
+
+# Drain any buffered stdin (from ESC presses during scalar wait)
+while kb_mgr.get_key() is not None: pass
+
 lp.Reset(); update_ui()
 
 # --- 11. Main Loop ---
