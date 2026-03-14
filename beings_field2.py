@@ -192,10 +192,17 @@ class LaunchpadMido:
         self.out_port.send(mido.Message('sysex', data=[0x00, 0x20, 0x29, 0x02, 0x0E, 0x03, 0x00, 0x00]))
         time.sleep(0.1)
 
-        for i in range(128):
-            self.out_port.send(mido.Message('note_off', note=i, velocity=0))
-            self.out_port.send(mido.Message('control_change', control=i, value=0))
-        time.sleep(0.1)
+        """Turn off only the 8x8 grid LEDs (IDs 11-18, 21-28, ... 81-88), leaving top/side buttons intact."""
+        for row in range(1, 9):
+            for col in range(1, 9):
+                bid = row * 10 + col
+                self.out_port.send(mido.Message('note_off', note=bid, velocity=0))
+        time.sleep(0.05)
+
+        #for i in range(128):
+        #    self.out_port.send(mido.Message('note_off', note=i, velocity=0))
+        #    self.out_port.send(mido.Message('control_change', control=i, value=0))
+        #time.sleep(0.1)
 
     def Reset(self):
         self.out_port.send(mido.Message('sysex', data=[0x00, 0x20, 0x29, 0x02, 0x0E, 0x03, 0x00, 0x00]))

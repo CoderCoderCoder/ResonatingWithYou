@@ -590,6 +590,11 @@ if _verified_chans > 0:
 # --- 3. Global State ---
 running = True
 is_fading_out = False
+
+def stop_running():
+    """Safely set running=False from Timer threads."""
+    global running
+    running = False
 reverb_mode = 0
 sound_profile_idx = 0
 migration_active = False
@@ -795,7 +800,7 @@ class CellAgent:
             is_root = (SCALES_DICT[s_name][self.note_idx % len(SCALES_DICT[s_name])] == 0)
             color_b = COLOR_ROOT_BRIGHT if is_root else COLOR_MAP_BRIGHT[s_name]
             lp_led_grid(self.x, self.y, color_b[0], color_b[1])
-            threading.Timer(0.1, self.refresh_led).start()
+            _t = threading.Timer(0.1, self.refresh_led); _t.daemon = True; _t.start()
 
 agents = [CellAgent(x, y) for y in range(8) for x in range(8)]
 last_scale_transition = 0
@@ -813,7 +818,7 @@ try:
         if key == '\x1b':  # ESC key
             print("\n--- System: ESC Pressed. Fading out... ---")
             is_fading_out = True; master_fader.stop()
-            threading.Timer(4.1, lambda: globals().update(running=False)).start()
+            _t = threading.Timer(4.1, stop_running); _t.daemon = True; _t.start()
 
         # Unified event handling: keyboard emulation or hardware Launchpad
         if EMULATE_MODE:
@@ -825,10 +830,10 @@ try:
             bid, state = bid_state[0], bid_state[1]
             if bid == SIDE_POWER_BTN and state > 0:
                 print("FADING OUT..."); is_fading_out = True; master_fader.stop()
-                threading.Timer(4.1, lambda: globals().update(running=False)).start()
+                _t = threading.Timer(4.1, stop_running); _t.daemon = True; _t.start()
             elif bid == SIDE_BTNS[0] and state > 0:
                 print("PANIC RESET..."); master_fader.stop()
-                threading.Timer(4.0, lambda: [a.deactivate() for a in agents] + [master_fader.play()]).start()
+                _t = threading.Timer(4.0, lambda: [a.deactivate() for a in agents] + [master_fader.play()]); _t.daemon = True; _t.start()
             elif bid == SIDE_DELAY_BTN and state > 0:
                 delay_cycle_idx = (delay_cycle_idx + 1) % 4
                 for d in delays:
@@ -916,3 +921,7 @@ finally:
         kb_mgr.close()
         
     print("--- System Offline ---")
+    
+    # Force exit to kill any lingering daemon threads (Pyo callbacks, etc.)
+    import os
+    os._exit(0)
