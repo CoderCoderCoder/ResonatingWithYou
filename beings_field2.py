@@ -1,4 +1,4 @@
-import sys
+import sys, os
 import time, random, math, threading
 import numpy as np
 import argparse
@@ -1401,7 +1401,7 @@ try:
             if bid == T[0]:
                 if delay_mode == 0:
                     delay_mode = 1
-                    delay_timer = threading.Timer(8.0, reset_delay)
+                    delay_timer = threading.Timer(8.0, reset_delay); delay_timer.daemon = True
                     delay_timer.start()
                     print("--- Top Button 0: Delay set to Circular (Red) [8s Lock] ---")
                 elif delay_mode == 1:
@@ -1411,14 +1411,14 @@ try:
                 update_ui()
             elif bid == T[1]:
                 if not fm_enabled:
-                    fm_enabled = True; fm_timer = threading.Timer(8.0, reset_fm); fm_timer.start()
+                    fm_enabled = True; fm_timer = threading.Timer(8.0, reset_fm); fm_timer.daemon = True; fm_timer.start()
                     print("--- Top Button 1: FM Collision Enabled [8s Lock] ---")
                     update_ui()
             elif bid == T[2] and not warp_running:
                 threading.Thread(target=warp_sequence, daemon=True).start()
             elif bid == T[3]:
                 if gran_mode == 0:
-                    gran_mode = 1; gran_timer = threading.Timer(8.0, reset_gran); gran_timer.start()
+                    gran_mode = 1; gran_timer = threading.Timer(8.0, reset_gran); gran_timer.daemon = True; gran_timer.start()
                     print("--- Top Button 3: Granulation set to Active (Red) [8s Lock] ---")
                 elif gran_mode == 1:
                     gran_mode = 2
@@ -1427,14 +1427,14 @@ try:
                 update_ui()
             elif bid == T[4]:
                 if not wrap_enabled:
-                    wrap_enabled = True; wrap_timer = threading.Timer(8.0, reset_wrap); wrap_timer.start()
+                    wrap_enabled = True; wrap_timer = threading.Timer(8.0, reset_wrap); wrap_timer.daemon = True; wrap_timer.start()
                     print("--- Top Button 4: Wrap, no-walls set to Active (Red) [8s Lock] ---")
                     update_ui()
             elif bid == T[5]:
                 # Button 5: Obstacle mode (Moved from T[7])
                 if obstacle_mode == 0:
                     obstacle_mode = 1
-                    obstacle_timer = threading.Timer(8.0, reset_obstacles)
+                    obstacle_timer = threading.Timer(8.0, reset_obstacles); obstacle_timer.daemon = True
                     obstacle_timer.start()
                     print("--- Top Button 5: Obstacles set to Remove (Red) [8s Lock] ---")
                     threading.Thread(target=remove_obstacles_sequence, daemon=True).start()
@@ -1476,3 +1476,4 @@ finally:
             except: pass
     if 'kb_mgr' in locals(): kb_mgr.close()
     print("--- System Shutdown: Goodbye ---")
+    os._exit(0)
